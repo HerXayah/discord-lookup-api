@@ -31,7 +31,7 @@ services:
     volumes:
       - ./.env:/app/.env:ro
     networks:
-      - mainstack
+      - mainstack_default
     ports:
       - "3000:3000"
     environment:
@@ -47,4 +47,4 @@ services:
     volumes: 
       - redis_data:/data
     networks:
-      - mainstack
+      - mainstack_default
