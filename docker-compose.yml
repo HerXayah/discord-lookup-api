@@ -48,3 +48,7 @@ services:
       - redis_data:/data
     networks:
       - mainstack_default
+
+networks:
+  mainstack_default:
+    external: true
