@@ -44,22 +44,3 @@ services:
     command: redis-server --save 20 1 --loglevel warning --requirepass uwumepw
     volumes: 
       - redis_data:/data
-
-      # example labels
-        - "traefik.enable=true"
-        - "traefik.http.routers.nginx.rule=Host(`egirldev.co.uk`) || Host(`thicc-thighs.de`) || Host(`egirl.ing`)"
-        - "traefik.http.routers.nginx.entrypoints=http"
-        - "traefik.http.routers.nginx.middlewares=nginx-https-redirect"
-        - "traefik.http.middlewares.nginx-https-redirect.redirectscheme.scheme=https"
-        - "traefik.http.routers.nginx-secure.rule=Host(`egirldev.co.uk`) || Host(`thicc-thighs.de`) || Host(`egirl.ing`)"
-        - "traefik.http.routers.nginx-secure.entrypoints=https"
-        - "traefik.http.routers.nginx-secure.tls=true"
-        - "traefik.http.routers.nginx-secure.tls.certresolver=cloudflare"
-        - "traefik.http.routers.nginx-secure.tls.domains[0].main=egirldev.co.uk"
-        - "traefik.http.routers.nginx-secure.tls.domains[1].main=thicc-thighs.de"
-        - "traefik.http.routers.nginx-secure.tls.domains[1].sans=*.thicc-thighs.de"
-        - "traefik.http.routers.nginx-secure.tls.domains[0].sans=*.egirldev.co.uk"
-        - "traefik.http.routers.nginx-secure.tls.domains[2].sans=egirl.ing"
-        - "traefik.http.routers.nginx-secure.tls.domains[2].main=egirl.ing"
-        - "traefik.http.routers.nginx-secure.service=nginx-node"
-        - "traefik.http.services.nginx-node.loadbalancer.server.port=80"
