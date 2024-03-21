@@ -1,0 +1,32 @@
+version: '3'
+
+volumes:
+  redis_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /opt/redisData/
+    
+services:
+  instance:
+    build:
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    container_name: discord-lookup
+    network_mode: bridge
+    volumes:
+      - ./.env:/app/.env:ro
+    environment:
+      TZ: Europe/Berlin
+    depends_on:
+      - redisDB
+  redisDB:
+    cache:
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning --requirepass uwumepw
+    volumes: 
+      - redis_data:/data
