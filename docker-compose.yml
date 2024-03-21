@@ -15,8 +15,24 @@ services:
     restart: unless-stopped
     container_name: discord-lookup
     network_mode: bridge
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.discord-lookup.rule=Host(`discord-lookup.egirl.ing`)"
+      - "traefik.http.routers.discord-lookup.entrypoints=http"
+      - "traefik.http.routers.discord-lookup.middlewares=discord-lookup-https-redirect"
+      - "traefik.http.middlewares.discord-lookup-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.discord-lookup-secure.rule=Host(`discord-lookup.egirl.ing`)"
+      - "traefik.http.routers.discord-lookup-secure.entrypoints=https"
+      - "traefik.http.routers.discord-lookup-secure.tls=true"
+      - "traefik.http.routers.discord-lookup-secure.tls.certresolver=cloudflare"
+      - "traefik.http.routers.discord-lookup-secure.tls.domains[0].main=discord-lookup.egirl.ing"
+      - "traefik.http.routers.discord-lookup-secure.tls.domains[0].sans=*.discord-lookup.egirl.ing"
+      - "traefik.http.routers.discord-lookup-secure.service=discord-lookup-node"
+      - "traefik.http.services.discord-lookup-node.loadbalancer.server.port=3000"
     volumes:
       - ./.env:/app/.env:ro
+    ports:
+      - "3069:3000"
     environment:
       TZ: Europe/Berlin
     depends_on:
@@ -29,3 +45,22 @@ services:
     command: redis-server --save 20 1 --loglevel warning --requirepass uwumepw
     volumes: 
       - redis_data:/data
+
+      # example labels
+        - "traefik.enable=true"
+        - "traefik.http.routers.nginx.rule=Host(`egirldev.co.uk`) || Host(`thicc-thighs.de`) || Host(`egirl.ing`)"
+        - "traefik.http.routers.nginx.entrypoints=http"
+        - "traefik.http.routers.nginx.middlewares=nginx-https-redirect"
+        - "traefik.http.middlewares.nginx-https-redirect.redirectscheme.scheme=https"
+        - "traefik.http.routers.nginx-secure.rule=Host(`egirldev.co.uk`) || Host(`thicc-thighs.de`) || Host(`egirl.ing`)"
+        - "traefik.http.routers.nginx-secure.entrypoints=https"
+        - "traefik.http.routers.nginx-secure.tls=true"
+        - "traefik.http.routers.nginx-secure.tls.certresolver=cloudflare"
+        - "traefik.http.routers.nginx-secure.tls.domains[0].main=egirldev.co.uk"
+        - "traefik.http.routers.nginx-secure.tls.domains[1].main=thicc-thighs.de"
+        - "traefik.http.routers.nginx-secure.tls.domains[1].sans=*.thicc-thighs.de"
+        - "traefik.http.routers.nginx-secure.tls.domains[0].sans=*.egirldev.co.uk"
+        - "traefik.http.routers.nginx-secure.tls.domains[2].sans=egirl.ing"
+        - "traefik.http.routers.nginx-secure.tls.domains[2].main=egirl.ing"
+        - "traefik.http.routers.nginx-secure.service=nginx-node"
+        - "traefik.http.services.nginx-node.loadbalancer.server.port=80"
