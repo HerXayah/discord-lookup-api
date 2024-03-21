@@ -117,6 +117,8 @@ app.get("/v1/user/:id/", cors({
 }), async (req, res) => {
     let id = req.params.id;
 
+    console.log(`Requesting user ${id}`)
+
     try {
         let cached = await client.get(`user_${id}`)
 
