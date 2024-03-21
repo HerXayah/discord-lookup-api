@@ -27,7 +27,7 @@ services:
       - "traefik.http.routers.discord-lookup-secure.tls.domains[0].main=discord-lookup.egirl.ing"
       - "traefik.http.routers.discord-lookup-secure.tls.domains[0].sans=*.discord-lookup.egirl.ing"
       - "traefik.http.routers.discord-lookup-secure.service=discord-lookup-node"
-      - "traefik.http.services.discord-lookup-node.loadbalancer.server.port=3000"
+      - "traefik.http.services.discord-lookup-node.loadbalancer.server.port=3069"
     volumes:
       - ./.env:/app/.env:ro
     ports:
