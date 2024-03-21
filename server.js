@@ -37,6 +37,10 @@ app.use((req, res, next) => {
     next();
 });
 
+app.on("/", (req, res) => {
+    console.log("Request received");
+});
+
 app.get("/", (req, res) => {
     res.send("root page");
 });
