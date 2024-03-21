@@ -23,6 +23,10 @@ client.on("error", (err) => {
     console.log(err);
 })
 
+client.on("connect", () => {
+    console.log("Connected to Redis");
+})
+
 const app = express();
 app.use(cors());
 
