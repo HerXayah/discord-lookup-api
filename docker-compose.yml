@@ -30,6 +30,8 @@ services:
       - "traefik.http.services.discord-lookup-node.loadbalancer.server.port=3000"
     volumes:
       - ./.env:/app/.env:ro
+    networks:
+      - mainstack
     ports:
       - "3000:3000"
     environment:
@@ -44,3 +46,5 @@ services:
     command: redis-server --save 20 1 --loglevel warning --requirepass uwumepw
     volumes: 
       - redis_data:/data
+    networks:
+      - mainstack
