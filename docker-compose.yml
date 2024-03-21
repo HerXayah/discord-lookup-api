@@ -14,7 +14,6 @@ services:
       dockerfile: Dockerfile
     restart: unless-stopped
     container_name: discord-lookup
-    network_mode: bridge
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.discord-lookup.rule=Host(`discord-lookup.egirl.ing`)"
