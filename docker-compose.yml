@@ -48,6 +48,30 @@ services:
       - redis_data:/data
     networks:
       - mainstack_default
+  redis_insight:
+    image: redislabs/redisinsight:latest
+    container_name: redis_insight
+    restart: always
+    ports:
+      - 8001:8001
+    volumes:
+      - redis_data:/db
+    networks:
+      - mainstack_default
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.redis-insight.rule=Host(`redis-insight.egirl.ing`)"
+      - "traefik.http.routers.redis-insight.entrypoints=http"
+      - "traefik.http.routers.redis-insight.middlewares=redis-insight-https-redirect"
+      - "traefik.http.middlewares.redis-insight-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.redis-insight-secure.rule=Host(`redis-insight.egirl.ing`)"
+      - "traefik.http.routers.redis-insight-secure.entrypoints=https"
+      - "traefik.http.routers.redis-insight-secure.tls=true"
+      - "traefik.http.routers.redis-insight-secure.tls.certresolver=cloudflare"
+      - "traefik.http.routers.redis-insight-secure.tls.domains[0].main=redis-insight.egirl.ing"
+      - "traefik.http.routers.redis-insight-secure.tls.domains[0].sans=*.redis-insight.egirl.ing"
+      - "traefik.http.routers.redis-insight-secure.service=redis-insight-node"
+      - "traefik.http.services.redis-insight-node.loadbalancer.server.port=8001"
 
 networks:
   mainstack_default:
